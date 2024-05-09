@@ -1,0 +1,42 @@
+Echim Eugen Andrei 322CC
+Punctaj Tema : 100 / 100
+
+	I.main
+
+- Am initializat mai intai tabela de rutare si table de ARP.
+- Am luat Ether Header si IP Header si am verificat daca pachetul este de tip ICMP, caz in care trimit ICMP corespunzator.
+- Am verificat daca pachetul este de tip ARP, caz in care trimit ARP corespunzator(Request sau Reply).
+- Am verificat daca checksum-ul este corect, daca da continui, daca nu, drop.
+- Am verificat daca TTL-ul este <= 1, ca in care dam drop.Daca e bun actualizam TTL-ul.
+- Am apelat functia de cautare a rutei pentru a afla cea mai buna ruta pentru pachetul respectiv.
+- Am actualizat checksum-ul.
+- Am verificat daca exista intrare deja in cache - ul tabele ARP.Daca exista, am trimis pachetul, daca nu am adaugat pachetul si datele despre acesta in cozi si am trimis un ARP Request.
+
+	II.compare
+
+- Functie utilizata de qsort pentru a sorta tabela de rutare crescator dupa prefix si in cazul in care prefixele sunt egale sa se sorteze crescator dupa masca.
+
+	III.get_best_route
+
+- Functie care returneaza cea mai buna ruta pentru un pachet.
+- Am folosit binary search pentru a gasi un prefix egaul cu destinatia pachetului, iar apoi am cautat in dreapta pentru a gasi elementul cu acest prefix, dar masca maxima.
+
+	IV.get_arp_entry
+
+- Functie care verifica daca exista o intrare in tabela ARP pentru o adresa IP.Daca da returneaza elementul, daca nu returneaza NULL.
+
+	V.send_icmp
+
+- Mai intai iau datele de la pachetul vechi si modific destinatia si sursa Ether_Header-ului.
+- Verific daca trebuie sa trimit un ICMP de tip "Echo Request", caz in care setez type si code la 0, calculez checksum si setez destinatia si sursa corespunzatoare, urmand sa trimit pachetul creat.
+- Daca nu trebuie sa trimit un "Echo Request", inseamn ca trebuie sa trimit un IMCP de tip "Destination Unreachable" sau "Time Exceeded", caz in care creez un nou pachet, setez variabilele corespunzator si trimit pachetul.
+
+	VI.send_arp
+
+- Mai intai creez un nou pachet de tip ARP si extrag ether_header-ul si arp_header-ul.
+- Setez datele generale pentru ARP Header(htype, hlen, ptype, plen, op).
+- Daca trebuie sa trimit un ARP Reply, setez variabilele din ether_header si arp_header corespunzator si trimit pachetul.
+- Daca trebuie sa trimit un ARP Request, setez iar variabilele corespunzator si trimit pachetul.
+
+
+Sursa de inspiratie : Am folosit laboratul 4, rezolvat la facultate pentru cerinta : Procesul de dirijare(30p).
